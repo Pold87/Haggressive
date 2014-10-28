@@ -1,0 +1,9 @@
+{-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module Haggressive
+       (
+         ---
+       ) where
+
+import qualified Data.Vector as V

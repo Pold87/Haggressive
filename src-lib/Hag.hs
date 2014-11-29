@@ -52,7 +52,7 @@ parseCsv text = decodeWith
 -- |Get directory contents of 'FilePath'. A better variant is at:
 getFiles :: FilePath -> IO [FilePath]
 getFiles dir =
-  S.getDirectoryContents dir >>= return . filter (`notElem` [".", ".."])
+  S.getDirectoryContents dir >>= return . map (dir ++) . filter (`notElem` [".", ".."])
 
 
 -- |
@@ -116,7 +116,9 @@ insertInMap oldMap tweet = M.insert tweet val oldMap
 
 -- |Specify k (the number of neighbors) and compare two vectors of
 -- 'Tweet's and return the k nearest neighbors for each 'Tweet'.
-validate :: Int -> (V.Vector Tweet, V.Vector Tweet) -> V.Vector (Tweet,[Tweet])
+validate :: Int -- value of k
+            -> (V.Vector Tweet, V.Vector Tweet) -- vector of (test, train)
+            -> V.Vector (Tweet, PS.PSQ Tweet Float) -- vector
 validate k (v1,v2) =  V.map (crossCheckBetterK k miniDictV2) v1
   where miniDictV2 = V.foldl insertInMap M.empty v2 :: M.Map Tweet (M.Map String Float)
 
@@ -124,7 +126,7 @@ validate k (v1,v2) =  V.map (crossCheckBetterK k miniDictV2) v1
 crossCheckBetterK :: Int
                      -> M.Map Tweet (M.Map String Float)
                      -> Tweet
-                     -> (Tweet, [Tweet])
+                     -> (Tweet, PS.PSQ Tweet Float)
 crossCheckBetterK k tweetMap tweet = mini
   where mini = featureIntersectionBetterK k tweetMap tweet
 
@@ -132,19 +134,21 @@ crossCheckBetterK k tweetMap tweet = mini
 featureIntersectionBetterK :: Int
                               -> M.Map Tweet (M.Map String Float)
                               -> Tweet
-                              ->  (Tweet, [Tweet])
+                              ->  (Tweet, PS.PSQ Tweet Float)
 featureIntersectionBetterK k tweetMap tweet = (tweet, mini)
-  where mini = queueTake k $ PS.fromList
+  where mini = -- queueTake k
+               -- PS.toList
+               PS.fromList
                $ M.elems
                $ M.mapWithKey (mergeTweetFeatures intersectDistance tweet) tweetMap
 
--- |TODO!
+-- | Take the first k elements of a queue
 queueTake :: Int -> PS.PSQ Tweet Float -> [Tweet]
 queueTake k queue = queueTake' k queue []
 
 -- |TODO!
 queueTake' :: Int -> PS.PSQ Tweet Float -> [Tweet] -> [Tweet]
-queueTake' 0 queue acc = acc
+queueTake' 0 _ acc = acc
 queueTake' k queue acc = case mini of
   Nothing -> error "Empty queue"
   Just m -> queueTake' (k - 1) (PS.deleteMin queue) (PS.key m:acc)
@@ -165,17 +169,24 @@ mergeTweetFeatures distF t1 t2 mdt2 = t2 PS.:-> distance
 
 -- | Calculaute the amount of tweets where the predicted label matches
 -- the actual label.
-crossCheckRealK ::  V.Vector (Tweet,[Tweet]) -> V.Vector Float
-crossCheckRealK vec = V.map (\(a,b) -> if (tLabel a) == getCategoryK b then 1 else 0) vec
+compareLabels ::  Int -> V.Vector (Tweet,PS.PSQ Tweet Float) -> V.Vector Float
+compareLabels k vec = V.map
+                    (\(a,b) -> if (tLabel a) == getLabel k b then 1 else 0)
+                    vec
 
--- |TODO!
-getCategoryK :: [Tweet] -> String
-getCategoryK tweets = if agg > nonAgg then "aggressive" else "non_aggressive"
-  where categories = map tLabel tweets
+-- | Gets the label for . To this end, it checks the nearest neigbors
+-- that are represented as a list of 'Tweet's.  If there are more
+-- aggressive than non_aggressive 'Tweet's, the label will be
+-- aggressive, otherwise, it will be non-aggressive
+getLabel :: Int -> PS.PSQ Tweet Float -> String
+getLabel k queue = if agg > nonAgg then "aggressive" else "non_aggressive"
+  where tweets = queueTake k queue
+        categories = map tLabel tweets
         agg = length $ filter (== "aggressive") categories
         nonAgg = length $ filter (== "non_aggressive") categories
 
--- |TODO!
+-- | Get sum total of a vector of floats (i.e., the number of
+-- correctly classified tweets) and return the accuracy
 getAccuracy :: V.Vector Float -> Float
 getAccuracy vec =   (V.foldl (+) 0 vec) / fromIntegral (V.length vec)
 
@@ -207,7 +218,7 @@ main = do
 
     -- All the work is actually done by invoking validate (k-nearest
     -- neighbor classifier with several ks)
-    k1 = map (getAccuracy . crossCheckRealK . validate 1) scheme
+    k1 = map (getAccuracy . (compareLabels 1) . validate 1) scheme
 
   -- Print result
   print k1

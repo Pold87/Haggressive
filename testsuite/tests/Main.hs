@@ -1,7 +1,8 @@
-module Main where
+module My where
 
 -- import Haggressive.Main
-import Test.HUnit
+import qualified Test.HUnit as T
+import qualified Distribution.TestSuite as TS
 import Data.Vector as V
 import Data.Map as M
 import qualified Hag as H
@@ -30,14 +31,14 @@ map2 = M.fromList [ ("hab", 2)
 
 
 -- Define tests
-testFrequency1, testFrequency2 :: Test
-testFrequency1 = H.frequency vec1 ~?= map1
-testFrequency2 = H.frequency vec1 ~?= map2
+testFrequency1, testFrequency2 :: T.Test
+testFrequency1 = H.frequency vec1 T.~?= map1
+testFrequency2 = H.frequency vec1 T.~?= map2
 
 
 -- Run tests
-tests :: IO Counts
-tests = runTestTT (TestList [ testFrequency1
+tests :: IO T.Counts
+tests = T.runTestTT (T.TestList [ testFrequency1
                             , testFrequency2
                            ])
 

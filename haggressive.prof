@@ -1,0 +1,83 @@
+	Sat Nov  1 21:32 2014 Time and Allocation Profiling Report  (Final)
+
+	   haggressive +RTS -N -p -s -h -i0.1 -RTS tweets/
+
+	total time  =       73.91 secs   (73908 ticks @ 1000 us, 1 processor)
+	total alloc = 53,770,689,328 bytes  (excludes profiling overheads)
+
+COST CENTRE                    MODULE       %time %alloc
+
+<=                             Tweethelpers  46.7    0.0
+featureIntersectionBetter.mini Hag           29.2   90.8
+intersectDistance              Hag           17.2    4.4
+compare                        Tweethelpers   3.2    0.0
+tweetToMiniDict                Hag            2.9    3.9
+
+
+                                                                                        individual     inherited
+COST CENTRE                               MODULE                      no.     entries  %time %alloc   %time %alloc
+
+MAIN                                      MAIN                        137           0    0.0    0.0   100.0  100.0
+ main                                     Hag                         276           0    0.0    0.1   100.0  100.0
+  end                                     Hag                         296          11    0.0    0.0     0.0    0.0
+  crossCheckReal                          Hag                         295          11    0.0    0.0     0.0    0.0
+   crossCheckReal.\                       Hag                         323        3465    0.0    0.0     0.0    0.0
+    ==                                    Tweethelpers                324        3465    0.0    0.0     0.0    0.0
+  validateHumanBetter                     Hag                         294          11    0.0    0.0    99.9   99.5
+   validateHumanBetter.miniDictV2         Hag                         301          11    0.0    0.0     2.7    3.6
+    insertInMap                           Hag                         303       34020    0.0    0.0     2.7    3.6
+     insertInMap.val                      Hag                         317       31124    0.0    0.0     2.5    3.6
+      tweetToMiniDict                     Hag                         318           0    2.5    3.5     2.5    3.6
+       message                            Tweethelpers                320       31124    0.0    0.0     0.0    0.0
+       frequency                          Hag                         319           0    0.0    0.0     0.0    0.1
+        countItem                         Hag                         321      262808    0.0    0.1     0.0    0.1
+     compare                              Tweethelpers                304      360529    0.1    0.0     0.1    0.0
+   crossCheckBetter                       Hag                         297        3465    0.0    0.0    97.2   95.8
+    crossCheckBetter.mini                 Hag                         298        3465    0.0    0.0    97.2   95.8
+     featureIntersectionBetter            Hag                         299        3465    0.0    0.0    97.2   95.8
+      featureIntersectionBetter.mini      Hag                         300        3465   29.2   90.8    97.2   95.8
+       <=                                 Tweethelpers                322   166504275   46.7    0.0    46.7    0.0
+       compare                            Tweethelpers                306     9800595    3.1    0.0     3.1    0.0
+       mergeTweetFeaturesBetter           Hag                         305     9804060    0.2    0.0    18.2    5.1
+        mergeTweetFeaturesBetter.mdt1     Hag                         309        3465    0.0    0.0     0.4    0.4
+         tweetToMiniDict                  Hag                         311           0    0.4    0.4     0.4    0.4
+          message                         Tweethelpers                314        3465    0.0    0.0     0.0    0.0
+          frequency                       Hag                         313           0    0.0    0.0     0.0    0.0
+           countItem                      Hag                         316       29224    0.0    0.0     0.0    0.0
+        mergeTweetFeaturesBetter.distance Hag                         307     9804060    0.4    0.3    17.7    4.7
+         intersectDistance                Hag                         308     9804060   17.2    4.4    17.2    4.4
+  main.scheme                             Hag                         291           1    0.0    0.0     0.0    0.0
+   mkCrossValScheme                       Tweethelpers                292           1    0.0    0.0     0.0    0.0
+    leaveOneOut                           Tweethelpers                293          11    0.0    0.0     0.0    0.0
+     ==                                   Tweethelpers                302        4203    0.0    0.0     0.0    0.0
+  main.tweets                             Hag                         283           1    0.0    0.0     0.0    0.0
+  main.r                                  Hag                         282           1    0.0    0.0     0.0    0.1
+   readIn                                 Hag                         288          11    0.0    0.0     0.0    0.1
+    parseRecord                           Tweethelpers                289        3465    0.0    0.1     0.0    0.1
+  main.processedCsvs                      Hag                         281           1    0.0    0.0     0.1    0.4
+   preprocess                             Preprocess                  284          11    0.0    0.0     0.1    0.4
+    preprocess.escaped                    Preprocess                  285          11    0.1    0.3     0.1    0.3
+     escaper                              Preprocess                  286      339321    0.0    0.1     0.0    0.1
+  unstream/resize                         Data.Text.Internal.Fusion   280          25    0.0    0.0     0.0    0.0
+  readTextDevice                          Data.Text.Internal.IO       279         187    0.0    0.0     0.0    0.0
+  getFiles                                Hag                         277           1    0.0    0.0     0.0    0.0
+ CAF                                      Main                        273           0    0.0    0.0     0.0    0.0
+  main                                    Main                        274           1    0.0    0.0     0.0    0.0
+ CAF                                      Hag                         272           0    0.0    0.0     0.0    0.0
+  stopWords                               Hag                         315           1    0.0    0.0     0.0    0.0
+  frequency                               Hag                         312           1    0.0    0.0     0.0    0.0
+  tweetToMiniDict                         Hag                         310           1    0.0    0.0     0.0    0.0
+  readIn                                  Hag                         290           0    0.0    0.0     0.0    0.0
+  main                                    Hag                         275           1    0.0    0.0     0.0    0.0
+ CAF                                      Preprocess                  271           0    0.0    0.0     0.0    0.0
+  escaper                                 Preprocess                  287           0    0.0    0.0     0.0    0.0
+ CAF                                      NLP.Tokenize.String         269           0    0.0    0.0     0.0    0.0
+ CAF                                      Data.Text.Array             224           0    0.0    0.0     0.0    0.0
+ CAF                                      Data.Text.Internal          220           0    0.0    0.0     0.0    0.0
+ CAF                                      GHC.Float                   189           0    0.0    0.0     0.0    0.0
+ CAF                                      GHC.Conc.Signal             179           0    0.0    0.0     0.0    0.0
+ CAF                                      GHC.IO.Encoding             173           0    0.0    0.0     0.0    0.0
+ CAF                                      GHC.IO.Encoding.Iconv       172           0    0.0    0.0     0.0    0.0
+ CAF                                      GHC.IO.Handle.FD            170           0    0.0    0.0     0.0    0.0
+ CAF                                      GHC.Event.Thread            164           0    0.0    0.0     0.0    0.0
+ CAF                                      GHC.IO.FD                   151           0    0.0    0.0     0.0    0.0

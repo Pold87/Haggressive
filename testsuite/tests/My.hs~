@@ -1,0 +1,129 @@
+module My where
+
+import           Data.Map               as M
+import           Data.Vector            as V
+import qualified Distribution.TestSuite as TS
+import qualified Hag                    as H
+import qualified Test.HUnit             as HU
+
+
+-- Lists
+list1, list2, list3 :: [String]
+list1 = [ "ich", "bin", "aber", "ich", "bin", "nicht" ]
+list2 = ["hey", "du", "hey", "du"]
+list3 = []
+
+-- Vectors
+vec1, vec2, vec3 :: V.Vector String
+vec1 = V.fromList list1
+vec2 = V.fromList list2
+vec3 = V.fromList list3
+
+
+-- Maps
+map1, map2 :: M.Map String Int
+map1 = M.fromList [ ("ich", 2)
+                  , ("bin", 2)
+                  , ("aber", 1)
+                  , ("nicht", 1)
+                  ]
+map2 = M.fromList [ ("hab", 2)
+                  , ("bin", 2)
+                  , ("aber", 1)
+                  , ("nicht", 2)
+                  ]
+
+-- Tuples
+tup1 = ("aggressive", "Monday", "Time", "User", "Whatup?? I like this sh******t!!")
+tup2 = ("a", "b", "c", "d", "e")
+tup3 = ("foo", "baa", "haa", "mu", "sa")
+
+tup4 = ("1", "2", "3", "4", "5")
+tup5 = ("z", "y", "x", "a", "Oh my goodness \"!§$%&/()=?")
+
+
+-- Tweets
+[tweet1, tweet2, tweet3, tweet4, tweet5] = Prelude.map H.parseTweet [tup1, tup2, tup3, tup4, tup5]
+
+-- Define tests
+
+-- frequency --
+testFrequency1, testFrequency3 :: HU.Test
+testFrequency1 = H.frequency vec1 HU.~?= map1
+testFrequency2 = H.frequency vec2 HU.~?= map2
+testFrequency3 = H.frequency vec3 HU.~?= M.empty
+
+
+
+vecTweets1, vecTweets2, vecTweets3 :: V.Vector H.Tweet
+vecTweets1 = H.parseTweets $ V.fromList [tup1, tup2, tup3]
+vecTweets2 = H.parseTweets $ V.fromList [tup4, tup5]
+vecTweets3 = H.parseTweets $ V.fromList [tup2, tup5]
+
+
+
+tweet1_m :: H.Tweet
+tweet1_m = H.Tweet "aggressive"
+                   "Monday"
+                   "Time"
+                   "User"
+                   "Whatup?? I like this sh******t!!"
+
+
+
+
+-- parseTweet
+parseTweetTest1 :: HU.Test
+parseTweetTest1 = H.parseTweet tup1 HU.~?= tweet1_m
+
+
+mkCrossValSchemeTest0, mkCrossValSchemeTest1, mkCrossValSchemeTest2 :: HU.Test
+mkCrossValSchemeTest0= H.mkCrossValScheme ([] :: [V.Vector H.Tweet]) HU.~?= []
+mkCrossValSchemeTest1 =
+  H.mkCrossValScheme [vecTweets1, vecTweets2]  HU.~?= [(vecTweets1, vecTweets2)
+                                                     , (vecTweets2, vecTweets1)
+                                                       ]
+mkCrossValSchemeTest2 =
+  H.mkCrossValScheme [vecTweets1, vecTweets2, vecTweets3] HU.~?= [(vecTweets1, vecTweets2 V.++ vecTweets3)
+                                                                , (vecTweets2, vecTweets1 V.++ vecTweets3)
+                                                                , (vecTweets3, vecTweets1 V.++ vecTweets2)]
+
+
+
+extractFeaturesTest =
+  H.extractFeatures tweet2 HU.?= M.fromList map1
+
+
+
+
+
+hunitTests = HU.TestList [testFrequency1
+                        , testFrequency3
+                        -- , parseTweetTest1
+                        , mkCrossValSchemeTest0
+                        , mkCrossValSchemeTest1
+                        , mkCrossValSchemeTest2
+                        ]
+
+runHUnitTests :: HU.Test -> IO TS.Progress
+runHUnitTests tests = do
+   (HU.Counts cases tried errors failures) <- HU.runTestTT tests
+   return $ if errors > 0
+      then TS.Finished $ TS.Error "There were errors in the HUnit tests"
+      else if failures > 0
+         then TS.Finished $ TS.Fail "There were failures in the HUnit tests"
+         else TS.Finished TS.Pass
+
+tests :: IO [TS.Test]
+tests = return [ TS.Test hunit ]
+  where
+    hunit = TS.TestInstance
+        { TS.run = runHUnitTests hunitTests
+        , TS.name = "HUnit Test Cases"
+        , TS.tags = ["hunit"]
+        , TS.options = []
+        , TS.setOption = \_ _ -> Right hunit
+        }
+
+main :: IO [TS.Test]
+main = tests

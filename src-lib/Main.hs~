@@ -1,13 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Main
+module Haggressive.Main
        (
          main
        ) where
 
-import qualified Data.Vector as V
-import qualified Data.Map as M
+import Data.Vector 
+import Data.Map
 
 data Tweet = Tweet { category :: String
                    , user :: String
@@ -17,11 +17,11 @@ data Tweet = Tweet { category :: String
                    } deriving (Show, Eq, Ord)
 
 
-countItem :: (Ord a) => M.Map a Int -> a -> M.Map a Int
-countItem m e = M.insertWith (+) e 1 m
+countItem :: (Ord a) => Map a Int -> a -> Map a Int
+countItem m e = insertWith (+) e 1 m
 
-frequency :: Ord a => V.Vector a -> M.Map a Int
-frequency = V.foldl' countItem M.empty
+frequency :: Ord a => Vector a -> Map a Int
+frequency = Data.Vector.foldl' countItem Data.Map.empty
 
 
 main :: IO ()

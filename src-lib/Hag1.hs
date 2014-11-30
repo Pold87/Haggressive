@@ -1,11 +1,9 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-
 {-|
 Module      : Hag
-Description : Classify Tweets (aggressive vs. non_aggressive) and evaluate
-              classification performance.
+Description : Classify Tweets (aggressive vs. non_aggressive) and evaluate classification performance.
 License     : None
 Maintainer  : Volker Strobel (volker.strobel87@gmail.com)
 Stability   : experimental
@@ -18,23 +16,25 @@ module Hag
 ( module Hag -- Should be changed after debugging
  ) where
 
+import           Control.Monad
 import qualified Data.ByteString.Lazy as L
 import           Data.Char
 import           Data.Csv
 import           Data.Either
 import           Data.List
 import qualified Data.Map             as M
-import qualified Data.PSQueue         as PS
 import qualified Data.Text            as T
 import           Data.Text.Encoding
 import qualified Data.Text.IO         as TI
 import qualified Data.Vector          as V
-import           Helpers
+
 import           NLP.Tokenize
 import           Preprocess
 import qualified System.Directory     as S
 import           System.Environment
-import           Tweets
+import           Tweethelpers
+
+import qualified Data.PSQueue         as PS
 -- import           Debug.Trace
 
 -- |
@@ -51,11 +51,12 @@ parseCsv text = decodeWith
 
 -- |Get directory contents of 'FilePath'. A better variant is at:
 getFiles :: FilePath -> IO [FilePath]
-getFiles dir = S.getDirectoryContents dir
-               >>= return . map (dir ++) . filter (`notElem` [".", ".."])
+getFiles dir =
+  S.getDirectoryContents dir >>= return . map (dir ++) . filter (`notElem` [".", ".."])
 
 
--- | = Dictionary operations
+-- |
+-- = Dictionary operations
 -- For convenice, I refer to two dictionaries:
 -- * Mini Dictionary
 -- The bag of words for /one/ Tweet
@@ -67,20 +68,21 @@ getFiles dir = S.getDirectoryContents dir
 -- not existing. If the item is already existing, its frequency will
 -- be increased by 1.
 countItem :: (Ord a) => M.Map a Float -> a -> M.Map a Float
-countItem myMap item = M.insertWith (+) item 1 myMap
+countItem theMap item = M.insertWith (+) item 1 theMap
 
 -- |Calculate the 'frequency' of items in a 'V.Vector' and return them
 -- in a 'M.Map'.
 frequency :: Ord a => V.Vector a -> M.Map a Float
 frequency = V.foldl' countItem M.empty
 
+
 iFrequency :: M.Map String Float -> String -> Float -> Float
 iFrequency dict word freq = freq * (log (totalNumberOfWords / freqWord))
   where freqWord =  M.findWithDefault 1 word dict
         totalNumberOfWords = M.foldl (+) 0 dict
 
--- |Takes a dictionary and a mini dictionary (frequency of words in
--- one Tweet) and calculates the idftf values for all words in the
+-- |Takes a mini dictionary (frequency of words in one Tweet) and a
+-- dictionary and calculates the idftf values for all words in the
 -- mini dictionary.
 idftf :: M.Map String Float -> M.Map String Float -> M.Map String Float
 idftf grandDict miniDict =  M.mapWithKey (iFrequency grandDict) miniDict
@@ -101,44 +103,57 @@ intersectDistance t1 t2 = foldl (+) 0 $ M.elems $ M.intersectionWith (+) t1 t2
 tweetToMiniDict :: Tweet -> M.Map String Float
 tweetToMiniDict  = frequency
                    . V.filter (/= "")
---                    . V.filter (`notElem` ["user"])
---                   . V.filter (`notElem` stopWords)
+                   . V.filter (`notElem` stopWords)
                    . V.map (filter isAlpha . map toLower)
-                   . V.filter (`notElem` ["USER", "RT"])
                    . V.fromList
                    . tokenize
                    . tMessage
 
 -- |Take a 'Grand Dictionary'
-insertInMap :: M.Map Tweet (M.Map String Float)
-               -> Tweet
-               -> M.Map Tweet (M.Map String Float)
+insertInMap :: M.Map Tweet (M.Map String Float) -> Tweet -> M.Map Tweet (M.Map String Float)
 insertInMap oldMap tweet = M.insert tweet val oldMap
   where val = tweetToMiniDict tweet
 
--- | Specify k (the number of neighbors) and compare two vectors of
--- 'Tweet's and return the all neighbors for each 'Tweet'.
-getNeighbors :: (V.Vector Tweet, V.Vector Tweet) -- ^ vector of (test, train)
-            -> V.Vector (Tweet, PS.PSQ Tweet Float) -- vector
-getNeighbors (v1,v2) =  V.map (crossCheck miniDictV2) v1
+-- |Specify k (the number of neighbors) and compare two vectors of
+-- 'Tweet's and return the k nearest neighbors for each 'Tweet'.
+validate :: Int -- value of k
+            -> (V.Vector Tweet, V.Vector Tweet) -- vector of (test, train)
+            -> V.Vector (Tweet,[Tweet]) -- vector
+validate k (v1,v2) =  V.map (crossCheckBetterK k miniDictV2) v1
   where miniDictV2 = V.foldl insertInMap M.empty v2 :: M.Map Tweet (M.Map String Float)
 
 -- |TODO!
-crossCheck :: M.Map Tweet (M.Map String Float)
+crossCheckBetterK :: Int
+                     -> M.Map Tweet (M.Map String Float)
                      -> Tweet
-                     -> (Tweet, PS.PSQ Tweet Float)
-crossCheck tweetMap tweet = mini
-  where mini = featureIntersection tweetMap tweet
+                     -> (Tweet, [Tweet])
+crossCheckBetterK k tweetMap tweet = mini
+  where mini = featureIntersectionBetterK k tweetMap tweet
 
 -- |TODO!
-featureIntersection :: M.Map Tweet (M.Map String Float) -- ^ 'Tweet's and their features
-                              -> Tweet -- ^ The 'Tweet'
-                              ->  (Tweet, PS.PSQ Tweet Float) -- ^ 'Tweet' and all neighbors
-featureIntersection tweetMap tweet = (tweet, mini)
-  where mini = PS.fromList
+featureIntersectionBetterK :: Int
+                              -> M.Map Tweet (M.Map String Float)
+                              -> Tweet
+                              ->  (Tweet, [Tweet])
+featureIntersectionBetterK k tweetMap tweet = (tweet, mini)
+  where mini = map PS.key
+               $ take k
+               $ PS.toAscList
+               $ PS.fromList
                $ M.elems
                $ M.mapWithKey (mergeTweetFeatures intersectDistance tweet) tweetMap
 
+-- | Take the first k elements of a queue
+queueTake :: Int -> PS.PSQ Tweet Float -> [Tweet]
+queueTake k queue = queueTake' k queue []
+
+-- |TODO!
+queueTake' :: Int -> PS.PSQ Tweet Float -> [Tweet] -> [Tweet]
+queueTake' 0 _ acc = acc
+queueTake' k queue acc = case mini of
+  Nothing -> error "Empty queue"
+  Just m -> queueTake' (k - 1) (PS.deleteMin queue) (PS.key m:acc)
+  where mini = PS.findMin queue
 
 -- |TODO!
 mergeTweetFeatures :: (M.Map String Float -> M.Map String Float -> Float)
@@ -153,29 +168,19 @@ mergeTweetFeatures distF t1 t2 mdt2 = t2 PS.:-> distance
 -- TODO: CHECK!! Seems to work sometimes with a == b, i.e. there are
 -- identical tweets?!
 
--- | Calculate the amount of tweets where the predicted label matches
+-- | Calculaute the amount of tweets where the predicted label matches
 -- the actual label.
-compareLabels ::  Int -> V.Vector (Tweet,PS.PSQ Tweet Float) ->  V.Vector Float
-compareLabels k vec = V.map
-                    (\(a,b) -> if (tLabel a) == getLabel k b then 1 else 0)
-                    vec
+crossCheckRealK ::  V.Vector (Tweet,[Tweet]) -> V.Vector Float
+crossCheckRealK vec = V.map (\(a,b) -> if (tLabel a) == getCategoryK b then 1 else 0) vec
 
-compareLabelsForScheme :: [V.Vector (Tweet,PS.PSQ Tweet Float)] -> Int -> [Float]
-compareLabelsForScheme vecs k = map (getAccuracy . compareLabels k) vecs
-
--- | Get the label for a 'Tweet' by looking at the k nearest
--- neighbors. If there are more aggressive than non_aggressive
--- 'Tweet's, the label will be aggressive, otherwise, it will be
--- non-aggressive.
-getLabel :: Int -> PS.PSQ Tweet Float -> String
-getLabel k queue = if agg > nonAgg then "aggressive" else "non_aggressive"
-  where tweets = queueTake k queue
-        categories = map tLabel tweets
+-- |TODO!
+getCategoryK :: [Tweet] -> String
+getCategoryK tweets = if agg > nonAgg then "aggressive" else "non_aggressive"
+  where categories = map tLabel tweets
         agg = length $ filter (== "aggressive") categories
         nonAgg = length $ filter (== "non_aggressive") categories
 
--- | Get sum total of a vector of floats (i.e., the number of
--- correctly classified tweets) and return the accuracy
+-- |TODO!
 getAccuracy :: V.Vector Float -> Float
 getAccuracy vec =   (V.foldl (+) 0 vec) / fromIntegral (V.length vec)
 
@@ -205,21 +210,12 @@ main = do
     -- Create a leave-one-out cross-validation scheme
     scheme = mkCrossValScheme tweets
 
-    -- Get all neighbors for all tweets for all schemes
-    allNeighbors = map getNeighbors scheme
-
-    ks = [1..100]
-
-    labeledTweets = map (compareLabelsForScheme allNeighbors) ks
-
-    results = encode labeledTweets
-    -- All the work is actually done by invoking getNeigbors (nearest
+    -- All the work is actually done by invoking validate (k-nearest
     -- neighbor classifier with several ks)
-    -- ks = map (getAccuracy . (compareLabels 1))
+    k1 = map (getAccuracy . crossCheckRealK . validate 1) scheme
 
-  -- Create header
-    header = encode
-             $ map (("fold_" ++) . show) ([1..10] :: [Integer])
+  -- Print result
+  print k1
 
-  -- Write output to a file
-  L.writeFile "resultsK.csv" $ header `L.append` results
+
+-- queueTake k

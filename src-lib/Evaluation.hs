@@ -17,13 +17,14 @@ import           Data.Text.Encoding
 import qualified Data.Text.IO               as TI
 import qualified Data.Vector                as V
 import           Hag
+import           Helpers
 import           NLP.Tokenize
 import           Preprocess
 import           Preprocess
 import qualified System.Directory           as S
 import           System.Environment
-import           Tweethelpers
-import           Tweethelpers
+import           Tweets
+
 
 import qualified Data.PSQueue               as PS
 -- import           Debug.Trace
@@ -68,8 +69,8 @@ main = do
       nonAggWords = (encode $ sortBy (comparing $ snd) $
               M.toList nonAggDict)  :: L.ByteString
 
-
-      header = BSL.pack "word,frequency\r\n" :: BSL.ByteString
+      -- Create a header
+      header = encode ["word","frequency"]
 
   -- Write output to csv
   L.writeFile "agg_words.csv" $ header `L.append` aggWords

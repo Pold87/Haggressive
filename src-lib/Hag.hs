@@ -29,13 +29,19 @@ import qualified Data.Text            as T
 import           Data.Text.Encoding
 import qualified Data.Text.IO         as TI
 import qualified Data.Vector          as V
+import           Debug.Trace
 import           Helpers
 import           NLP.Tokenize
 import           Preprocess
 import qualified System.Directory     as S
 import           System.Environment
 import           Tweets
--- import           Debug.Trace
+
+
+-- | Features are represented by a 'M.Map', where the keys are
+-- 'String's (e.g., the words in the message of a Tweet) and the
+-- values are 'Float's (e.g., the number of occurrence of a word)
+type FeatureMap = M.Map String Float
 
 -- |
 -- =IO and Parsing
@@ -63,33 +69,6 @@ getFiles dir = S.getDirectoryContents dir
 -- The bag of words for the entire Corpus
 -- __TODO__: Could be defined as type.
 
--- |Insert an item into a 'M.Map'. Default value is 1 if the item is
--- not existing. If the item is already existing, its frequency will
--- be increased by 1.
-countItem :: (Ord a) => M.Map a Float -> a -> M.Map a Float
-countItem myMap item = M.insertWith (+) item 1 myMap
-
--- |Calculate the 'frequency' of items in a 'V.Vector' and return them
--- in a 'M.Map'.
-frequency :: Ord a => V.Vector a -> M.Map a Float
-frequency = V.foldl' countItem M.empty
-
-iFrequency :: M.Map String Float -> String -> Float -> Float
-iFrequency dict word freq = freq * (log (totalNumberOfWords / freqWord))
-  where freqWord =  M.findWithDefault 1 word dict
-        totalNumberOfWords = M.foldl (+) 0 dict
-
--- |Takes a dictionary and a mini dictionary (frequency of words in
--- one Tweet) and calculates the idftf values for all words in the
--- mini dictionary.
-idftf :: M.Map String Float -> M.Map String Float -> M.Map String Float
-idftf grandDict miniDict =  M.mapWithKey (iFrequency grandDict) miniDict
-
--- |Take the bag of words of two 'Tweet's and return the distance as
--- 'Num'. /TODO/: Forgot it.
-intersectDistance :: (Num a) => M.Map String a -> M.Map String a -> a
-intersectDistance t1 t2 = foldl (+) 0 $ M.elems $ M.intersectionWith (+) t1 t2
-
 -- |Extract features (for the bag of words) for one Tweet.
 -- Thereby, the Tweet will be (in order of application):
 -- * tokenized
@@ -98,40 +77,83 @@ intersectDistance t1 t2 = foldl (+) 0 $ M.elems $ M.intersectionWith (+) t1 t2
 -- * 'String's that are not 'isAlpha' are removed
 -- * 'String's that are element of 'stopWords' are removed
 -- * Empty 'String's will be removed
-tweetToMiniDict :: Tweet -> M.Map String Float
-tweetToMiniDict  = frequency
-                   . V.filter (/= "")
---                    . V.filter (`notElem` ["user"])
---                   . V.filter (`notElem` stopWords)
-                   . V.map (filter isAlpha . map toLower)
-                   . V.filter (`notElem` ["USER", "RT"])
-                   . V.fromList
-                   . tokenize
-                   . tMessage
+extractFeatures :: Tweet -> FeatureMap
+extractFeatures tweet = M.union bagOfWords marks
+  where
+    preprocess = V.filter (`notElem` ["USER", "RT"])
+                 . V.fromList
+                 . tokenize -- TODO: This is just English!
+                 . tMessage
+    bagOfWords = frequency
+                 . V.filter (/= "")
+                 . V.map (filter isAlpha . map toLower)
+                 . preprocess
+                 $ tweet
+    marks = getMarks $ tMessage tweet
+    caps = getCaps $ preprocess tweet
 
--- |Take a 'Grand Dictionary'
-insertInMap :: M.Map Tweet (M.Map String Float)
+-- |Calculate the 'frequency' of items in a 'V.Vector' and return them
+-- in a 'M.Map'.
+frequency :: V.Vector String -> FeatureMap
+frequency = V.foldl' countItem M.empty
+
+-- |Insert an item into a 'M.Map'. Default value is 1 if the item is
+-- not existing. If the item is already existing, its frequency will
+-- be increased by 1.
+countItem :: M.Map String Float -> String -> FeatureMap
+countItem myMap item = M.insertWith (+) item 1 myMap
+
+-- |Calculate the number of exclamation and question marks and the
+-- amount of capital letters
+getMarks :: String -> FeatureMap
+getMarks str = M.fromList $ exclamationList ++ questionList
+  where
+    exclamationMarks = fromIntegral $ length $ filter (== '!') str -- TODO general case
+    questionMarks = fromIntegral $ length $ filter (== '?') str
+    exclamationList = if exclamationMarks /= 0
+                      then [("!", exclamationMarks / 5)]
+                      else []
+    questionList = if questionMarks /= 0
+                      then [("!", questionMarks / 5)]
+                      else []
+
+
+-- | Calculate the amount of capitalized words
+getCaps :: V.Vector String -> FeatureMap
+getCaps vecStr = M.fromList [("$", sum)]
+  where amount = V.map (length . filter isUpper) vecStr
+        sum = fromIntegral $ V.foldl (+) 0 amount :: Float
+
+-- |Take a 'M.Map', consisting of
+-- key: 'Tweet'
+-- value: 'FeatureMap'
+-- and one Tweet and create a new 'M.Map' with the added features
+-- from the 'Tweet'
+insertInMap :: M.Map Tweet FeatureMap
                -> Tweet
-               -> M.Map Tweet (M.Map String Float)
+               -> M.Map Tweet FeatureMap
 insertInMap oldMap tweet = M.insert tweet val oldMap
-  where val = tweetToMiniDict tweet
+  where val = extractFeatures tweet
 
--- | Specify k (the number of neighbors) and compare two vectors of
--- 'Tweet's and return the all neighbors for each 'Tweet'.
-getNeighbors :: (V.Vector Tweet, V.Vector Tweet) -- ^ vector of (test, train)
-            -> V.Vector (Tweet, PS.PSQ Tweet Float) -- vector
-getNeighbors (v1,v2) =  V.map (crossCheck miniDictV2) v1
-  where miniDictV2 = V.foldl insertInMap M.empty v2 :: M.Map Tweet (M.Map String Float)
+-- | Compare two vectors of 'Tweet's, the first is the test vector,
+-- the second the train vector and return the all neighbors for each
+-- 'Tweet'. 'grandDict' is a 'M.Map', where each entry consits of a
+-- 'Tweet' and its features
+getNeighbors :: (V.Vector Tweet, V.Vector Tweet)
+            -> V.Vector (Tweet, PS.PSQ Tweet Float)
+getNeighbors (v1,v2) =  V.map (crossCheck grandDict) v1
+  where grandDict = V.foldl insertInMap M.empty v2 :: M.Map Tweet FeatureMap
 
--- |TODO!
-crossCheck :: M.Map Tweet (M.Map String Float)
+-- | Take a grand dict and a 'Tweet' and return a pair of this 'Tweet'
+-- and all its nearest neighbors
+crossCheck :: M.Map Tweet FeatureMap
                      -> Tweet
                      -> (Tweet, PS.PSQ Tweet Float)
 crossCheck tweetMap tweet = mini
   where mini = featureIntersection tweetMap tweet
 
--- |TODO!
-featureIntersection :: M.Map Tweet (M.Map String Float) -- ^ 'Tweet's and their features
+-- |
+featureIntersection :: M.Map Tweet FeatureMap -- ^ 'Tweet's and their features
                               -> Tweet -- ^ The 'Tweet'
                               ->  (Tweet, PS.PSQ Tweet Float) -- ^ 'Tweet' and all neighbors
 featureIntersection tweetMap tweet = (tweet, mini)
@@ -140,18 +162,34 @@ featureIntersection tweetMap tweet = (tweet, mini)
                $ M.mapWithKey (mergeTweetFeatures intersectDistance tweet) tweetMap
 
 
--- |TODO!
-mergeTweetFeatures :: (M.Map String Float -> M.Map String Float -> Float)
+-- |Take a distance function, 'Tweet' 1, 'Tweet' 2 and a dictionary as
+-- 'FeatureMap' and create a 'PS.Binding' between 'Tweet' 2 and the
+-- distance from this 'Tweet' to the other 'Tweet'.
+mergeTweetFeatures :: (FeatureMap -> FeatureMap -> Float)
                       -> Tweet
                       -> Tweet
-                      -> M.Map String Float
+                      -> FeatureMap
                       -> PS.Binding Tweet Float
 mergeTweetFeatures distF t1 t2 mdt2 = t2 PS.:-> distance
-  where mdt1 = idftf mdt2 $ tweetToMiniDict t1  -- Feature extraction Tweet 1
+  where mdt1 = idftf mdt2 $ extractFeatures t1
         distance = negate $ distF mdt1 mdt2
 
--- TODO: CHECK!! Seems to work sometimes with a == b, i.e. there are
--- identical tweets?!
+
+-- |Take the features of two 'Tweet's and return the distance as
+-- 'Num'.
+intersectDistance :: (Num a) => M.Map String a -> M.Map String a -> a
+intersectDistance t1 t2 = foldl (+) 0 $ M.elems $ M.intersectionWith (+) t1 t2
+
+-- |Takes a dictionary and a mini dictionary (frequency of words in
+-- one Tweet) and calculates the idftf values for all words in the
+-- mini dictionary.
+idftf :: FeatureMap -> FeatureMap -> FeatureMap
+idftf grandDict miniDict =  M.mapWithKey (iFrequency grandDict) miniDict
+
+iFrequency :: FeatureMap -> String -> Float -> Float
+iFrequency dict word freq = freq * (log (totalNumberOfWords / freqWord))
+  where freqWord =  M.findWithDefault 1 word dict
+        totalNumberOfWords = M.foldl (+) 0 dict
 
 -- | Calculate the amount of tweets where the predicted label matches
 -- the actual label.

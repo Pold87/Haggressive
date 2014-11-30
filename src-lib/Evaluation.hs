@@ -31,14 +31,14 @@ import qualified Data.PSQueue               as PS
 
 -- |Create a dictionary ('M.Map String Float' /TODO/: probably define
 -- dictionary type) from a 'V.Vector' of 'Tweet's
-createDictionary :: V.Vector Tweet -> M.Map String Float
+createDictionary :: V.Vector Tweet -> FeatureMap
 createDictionary tweets = V.foldl (M.unionWith (+)) M.empty allTweets
-   where allTweets = V.map tweetToMiniDict tweets
+   where allTweets = V.map extractFeatures tweets
 
 -- |Create a 'grand dictionary' ('M.Map String Float' /TODO/: probably
 -- define dictionary type) from a 'mini dictionary' ('M.Map Tweet
 -- (M.Map String Float)'
-createDictionaryFromMap :: M.Map Tweet (M.Map String Float) -> M.Map String Float
+createDictionaryFromMap :: M.Map Tweet FeatureMap -> FeatureMap
 createDictionaryFromMap tweetMap = foldl (M.unionWith (+)) M.empty $ M.elems tweetMap
 
 main :: IO ()

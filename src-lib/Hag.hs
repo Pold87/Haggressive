@@ -78,7 +78,9 @@ getFiles dir = S.getDirectoryContents dir
 -- * 'String's that are element of 'stopWords' are removed
 -- * Empty 'String's will be removed
 extractFeatures :: Tweet -> FeatureMap
-extractFeatures tweet = M.union (M.union bagOfWords caps) marks --  marks
+extractFeatures tweet = -- M.union (M.union bagOfWords caps) marks --  marks
+  bagOfWords
+--  M.union bagOfWords caps
   where
     preprocess = V.filter (`notElem` ["USER", "RT"])
                  . V.fromList
@@ -90,8 +92,8 @@ extractFeatures tweet = M.union (M.union bagOfWords caps) marks --  marks
                  . V.map (map toLower) -- filter isAlpha .
                  . preprocess
                  $ tweet
-    marks = getMarks $ tMessage tweet
-    caps = getCaps $ preprocess tweet
+--    marks = getMarks $ tMessage tweet
+--    caps = getCaps $ preprocess tweet
 
 -- |Calculate the 'frequency' of items in a 'V.Vector' and return them
 -- in a 'M.Map'.
@@ -111,17 +113,17 @@ getMarks str = M.fromList $ exclamationList ++ questionList
   where
     exclamationMarks = fromIntegral $ length $ filter (== '!') str -- TODO general case
     questionMarks = fromIntegral $ length $ filter (== '?') str
-    exclamationList = if exclamationMarks /= 0
-                      then [("!", exclamationMarks)]
+    exclamationList = if exclamationMarks > 3
+                      then [("!", exclamationMarks / 4)]
                       else []
-    questionList = if questionMarks /= 0
-                      then [("!", questionMarks)]
+    questionList = if questionMarks > 3
+                      then [("!", questionMarks / 4)]
                       else []
 
 
 -- | Calculate the amount of capitalized words
 getCaps :: V.Vector String -> FeatureMap
-getCaps vecStr = M.fromList $ if sum /= 0 then [("$caps", sum)] else []
+getCaps vecStr = M.fromList $ if sum > 3 then [("$caps", sum / 4)] else []
   where amount = V.map (length . filter isUpper) vecStr
         sum = fromIntegral $ V.foldl (+) 0 amount :: Float
 
@@ -169,8 +171,8 @@ mergeTweetFeatures :: (FeatureMap -> FeatureMap -> Float)
 mergeTweetFeatures distF t1 t2 dictionary = queue
   where featuresT1 = extractFeatures t1 -- idftf dictionary $
         featuresT2 = extractFeatures t2
-        idftfT1 = idftf featuresT1 dictionary
-        idftfT2 = idftf featuresT2 dictionary
+--        idftfT1 = idftf featuresT1 dictionary
+--        idftfT2 = idftf featuresT2 dictionary
         distance = distF featuresT1 featuresT2 -- negate $
         queue = t2 PS.:-> distance
 
@@ -219,7 +221,7 @@ compareLabelsForScheme vecs k = map (getAccuracy . compareLabels k) vecs
 -- 'Tweet's, the label will be aggressive, otherwise, it will be
 -- non-aggressive.
 getLabel :: Int -> PS.PSQ Tweet Float -> String
-getLabel k queue = if agg > nonAgg then "aggressive" else "non_aggressive"
+getLabel k queue = if agg >= nonAgg then "aggressive" else "non_aggressive"
   where tweets = queueTake k queue
         labels = map tLabel tweets
         agg = length $ filter (== "aggressive") labels

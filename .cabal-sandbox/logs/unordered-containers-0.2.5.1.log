@@ -1,0 +1,25 @@
+Configuring unordered-containers-0.2.5.1...
+Building unordered-containers-0.2.5.1...
+Preprocessing library unordered-containers-0.2.5.1...
+[1 of 8] Compiling Data.HashMap.UnsafeShift ( Data/HashMap/UnsafeShift.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/UnsafeShift.o )
+[2 of 8] Compiling Data.HashMap.PopCount ( Data/HashMap/PopCount.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/PopCount.o )
+[3 of 8] Compiling Data.HashMap.Unsafe ( Data/HashMap/Unsafe.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Unsafe.o )
+[4 of 8] Compiling Data.HashMap.Array ( Data/HashMap/Array.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Array.o )
+[5 of 8] Compiling Data.HashMap.Base ( Data/HashMap/Base.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Base.o )
+[6 of 8] Compiling Data.HashMap.Strict ( Data/HashMap/Strict.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Strict.o )
+[7 of 8] Compiling Data.HashMap.Lazy ( Data/HashMap/Lazy.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Lazy.o )
+[8 of 8] Compiling Data.HashSet     ( Data/HashSet.hs, dist/dist-sandbox-e922fd97/build/Data/HashSet.o )
+[1 of 8] Compiling Data.HashMap.UnsafeShift ( Data/HashMap/UnsafeShift.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/UnsafeShift.p_o )
+[2 of 8] Compiling Data.HashMap.PopCount ( Data/HashMap/PopCount.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/PopCount.p_o )
+[3 of 8] Compiling Data.HashMap.Unsafe ( Data/HashMap/Unsafe.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Unsafe.p_o )
+[4 of 8] Compiling Data.HashMap.Array ( Data/HashMap/Array.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Array.p_o )
+[5 of 8] Compiling Data.HashMap.Base ( Data/HashMap/Base.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Base.p_o )
+[6 of 8] Compiling Data.HashMap.Strict ( Data/HashMap/Strict.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Strict.p_o )
+[7 of 8] Compiling Data.HashMap.Lazy ( Data/HashMap/Lazy.hs, dist/dist-sandbox-e922fd97/build/Data/HashMap/Lazy.p_o )
+[8 of 8] Compiling Data.HashSet     ( Data/HashSet.hs, dist/dist-sandbox-e922fd97/build/Data/HashSet.p_o )
+In-place registering unordered-containers-0.2.5.1...
+Creating package registration file:
+/tmp/pkgConf-unordered-containers-0.2.57891.1
+Installing library in
+/home/pold/Dropbox/Uni/Radboud/Text_Mining/Haggressive/.cabal-sandbox/lib/x86_64-linux-ghc-7.8.3/unordered-containers-0.2.5.1
+Registering unordered-containers-0.2.5.1...

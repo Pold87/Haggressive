@@ -1,0 +1,39 @@
+\haddockmoduleheading{Tweethelpers}
+\label{module:Tweethelpers}
+\haddockbeginheader
+{\haddockverb\begin{verbatim}
+module Tweethelpers (
+    mkCrossValScheme,  stopWords,  filterByLabel, 
+    Tweet(Tweet, tLabel, tUser, tDate, tTime, tMessage)
+  ) where\end{verbatim}}
+\haddockendheader
+
+\begin{haddockdesc}
+\item[
+mkCrossValScheme\ ::\ Eq\ a\ =>\ {\char 91}Vector\ a{\char 93}\ ->\ {\char 91}(Vector\ a,\ Vector\ a){\char 93}
+]
+\item[
+stopWords\ ::\ {\char 91}String{\char 93}
+]
+\item[
+filterByLabel\ ::\ Vector\ Tweet\ ->\ String\ ->\ Vector\ Tweet
+]
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+data\ Tweet
+\end{tabular}]\haddockbegindoc
+\haddockbeginconstrs
+\haddockdecltt{=} & \haddockdecltt{Tweet} & \\
+                    \haddockdecltt{tLabel :: String} &
+                    \haddockdecltt{tUser :: String} &
+                    \haddockdecltt{tDate :: String} &
+                    \haddockdecltt{tTime :: String} &
+                    \haddockdecltt{tMessage :: String} &
+\end{tabulary}\par
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+instance\ Eq\ Tweet\\instance\ Ord\ Tweet\\instance\ Show\ Tweet\\instance\ FromRecord\ Tweet
+\end{tabular}]
+\end{haddockdesc}

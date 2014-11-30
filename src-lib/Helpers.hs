@@ -1,10 +1,12 @@
 module Helpers
        (mkCrossValScheme
-       , queueTake)
+       , queueTake
+       , stopWords)
        where
 
 import qualified Data.PSQueue     as PS
 import qualified Data.Vector      as V
+import           Debug.Trace
 import           System.IO.Unsafe
 
 -- | 'FilePath' of the 'stopWords' that are removed before the
@@ -37,13 +39,13 @@ leaveOneOut all test = (test, V.concat $ filter (/= test) all)
 -- | Get total amount of capitalized characters in a list
 
 -- | Take the first k elements of a queue
-queueTake :: (Ord k, Ord p) => Int -> PS.PSQ k p -> [k]
+queueTake :: (Ord k, Ord p, Show k) => Int -> PS.PSQ k p -> [k]
 queueTake k queue = queueTake' k queue []
 
 -- | Helper function for 'queueTake'
 queueTake' :: (Ord k, Ord p) => Int -> PS.PSQ k p -> [k] -> [k]
 queueTake' 0 _ acc = acc
 queueTake' k queue acc = case mini of
-  Nothing -> error "Empty queue"
+  Nothing -> []
   Just m -> queueTake' (k - 1) (PS.deleteMin queue) (PS.key m:acc)
   where mini = PS.findMin queue

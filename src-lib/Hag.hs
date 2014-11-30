@@ -78,7 +78,7 @@ getFiles dir = S.getDirectoryContents dir
 -- * 'String's that are element of 'stopWords' are removed
 -- * Empty 'String's will be removed
 extractFeatures :: Tweet -> FeatureMap
-extractFeatures tweet = M.union bagOfWords marks
+extractFeatures tweet = M.union (M.union bagOfWords caps) marks --  marks
   where
     preprocess = V.filter (`notElem` ["USER", "RT"])
                  . V.fromList
@@ -86,7 +86,8 @@ extractFeatures tweet = M.union bagOfWords marks
                  . tMessage
     bagOfWords = frequency
                  . V.filter (/= "")
-                 . V.map (filter isAlpha . map toLower)
+                 . V.filter (`notElem` stopWords)
+                 . V.map (map toLower) -- filter isAlpha .
                  . preprocess
                  $ tweet
     marks = getMarks $ tMessage tweet
@@ -111,16 +112,16 @@ getMarks str = M.fromList $ exclamationList ++ questionList
     exclamationMarks = fromIntegral $ length $ filter (== '!') str -- TODO general case
     questionMarks = fromIntegral $ length $ filter (== '?') str
     exclamationList = if exclamationMarks /= 0
-                      then [("!", exclamationMarks / 5)]
+                      then [("!", exclamationMarks)]
                       else []
     questionList = if questionMarks /= 0
-                      then [("!", questionMarks / 5)]
+                      then [("!", questionMarks)]
                       else []
 
 
 -- | Calculate the amount of capitalized words
 getCaps :: V.Vector String -> FeatureMap
-getCaps vecStr = M.fromList [("$", sum)]
+getCaps vecStr = M.fromList $ if sum /= 0 then [("$caps", sum)] else []
   where amount = V.map (length . filter isUpper) vecStr
         sum = fromIntegral $ V.foldl (+) 0 amount :: Float
 
@@ -141,25 +142,20 @@ insertInMap oldMap tweet = M.insert tweet val oldMap
 -- 'Tweet' and its features
 getNeighbors :: (V.Vector Tweet, V.Vector Tweet)
             -> V.Vector (Tweet, PS.PSQ Tweet Float)
-getNeighbors (v1,v2) =  V.map (crossCheck grandDict) v1
-  where grandDict = V.foldl insertInMap M.empty v2 :: M.Map Tweet FeatureMap
+getNeighbors (v1,v2) =  V.map (featureIntersection dictionary) v1
+  where dictionary = V.foldl insertInMap M.empty v2 :: M.Map Tweet FeatureMap
 
--- | Take a grand dict and a 'Tweet' and return a pair of this 'Tweet'
+-- | Take a dictionary and a 'Tweet' and return a pair of this 'Tweet'
 -- and all its nearest neighbors
-crossCheck :: M.Map Tweet FeatureMap
-                     -> Tweet
-                     -> (Tweet, PS.PSQ Tweet Float)
-crossCheck tweetMap tweet = mini
-  where mini = featureIntersection tweetMap tweet
-
--- |
-featureIntersection :: M.Map Tweet FeatureMap -- ^ 'Tweet's and their features
-                              -> Tweet -- ^ The 'Tweet'
-                              ->  (Tweet, PS.PSQ Tweet Float) -- ^ 'Tweet' and all neighbors
+featureIntersection :: M.Map Tweet FeatureMap
+                              -> Tweet
+                              ->  (Tweet, PS.PSQ Tweet Float)
 featureIntersection tweetMap tweet = (tweet, mini)
-  where mini = PS.fromList
+  where
+    mini = PS.fromList
                $ M.elems
-               $ M.mapWithKey (mergeTweetFeatures intersectDistance tweet) tweetMap
+               $ M.mapWithKey (mergeTweetFeatures cosineDistance tweet) tweetMap
+    -- miniTrace = traceShowId $ map PS.prio $ PS.toList mini
 
 
 -- |Take a distance function, 'Tweet' 1, 'Tweet' 2 and a dictionary as
@@ -170,15 +166,32 @@ mergeTweetFeatures :: (FeatureMap -> FeatureMap -> Float)
                       -> Tweet
                       -> FeatureMap
                       -> PS.Binding Tweet Float
-mergeTweetFeatures distF t1 t2 mdt2 = t2 PS.:-> distance
-  where mdt1 = idftf mdt2 $ extractFeatures t1
-        distance = negate $ distF mdt1 mdt2
+mergeTweetFeatures distF t1 t2 dictionary = queue
+  where featuresT1 = extractFeatures t1 -- idftf dictionary $
+        featuresT2 = extractFeatures t2
+        idftfT1 = idftf featuresT1 dictionary
+        idftfT2 = idftf featuresT2 dictionary
+        distance = distF featuresT1 featuresT2 -- negate $
+        queue = t2 PS.:-> distance
+
+-- |Take the features of two 'Tweet's and return the distance as
+-- 'Num'.
+intersectDistance :: FeatureMap ->  FeatureMap -> Float
+intersectDistance t1 t2 = totalDistanceValue
+  where
+    intersection = M.elems $ M.intersectionWith min t1 t2
+    totalDistanceValue = foldl (+) 0 intersection
 
 
 -- |Take the features of two 'Tweet's and return the distance as
 -- 'Num'.
-intersectDistance :: (Num a) => M.Map String a -> M.Map String a -> a
-intersectDistance t1 t2 = foldl (+) 0 $ M.elems $ M.intersectionWith (+) t1 t2
+cosineDistance :: FeatureMap ->  FeatureMap -> Float
+cosineDistance t1 t2 = -1000 * (mySum / (wordsInT1 * wordsInT2))
+  where
+    wordsInT1 = M.foldl (+) 0 t1
+    wordsInT2 = M.foldl (+) 0 t2
+    intersection = M.elems $ M.intersectionWith (*) t1 t2
+    mySum = foldl (+) 0 intersection
 
 -- |Takes a dictionary and a mini dictionary (frequency of words in
 -- one Tweet) and calculates the idftf values for all words in the
@@ -208,9 +221,9 @@ compareLabelsForScheme vecs k = map (getAccuracy . compareLabels k) vecs
 getLabel :: Int -> PS.PSQ Tweet Float -> String
 getLabel k queue = if agg > nonAgg then "aggressive" else "non_aggressive"
   where tweets = queueTake k queue
-        categories = map tLabel tweets
-        agg = length $ filter (== "aggressive") categories
-        nonAgg = length $ filter (== "non_aggressive") categories
+        labels = map tLabel tweets
+        agg = length $ filter (== "aggressive") labels
+        nonAgg = length $ filter (== "non_aggressive") labels
 
 -- | Get sum total of a vector of floats (i.e., the number of
 -- correctly classified tweets) and return the accuracy

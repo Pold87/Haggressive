@@ -2,8 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Preprocess
-(preprocess)
-where
+       (preprocess)
+       where
 
 import qualified Data.Text as T
 

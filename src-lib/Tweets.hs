@@ -8,8 +8,6 @@ import           Data.Csv
 import qualified Data.PSQueue        as PS
 import qualified Data.Vector         as V
 
-
-
 -- | Parsing Record to Tweet
 instance FromRecord Tweet where
   parseRecord v
@@ -20,8 +18,6 @@ instance FromRecord Tweet where
                              v.! 3 <*>
                              v.! 4
          | otherwise = mzero
-
-
 
 -- | A Tweet consists of a category, a user, a date, a time, and a
 -- message

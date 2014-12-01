@@ -1,0 +1,190 @@
+Configuring cassava-0.4.2.0...
+Building cassava-0.4.2.0...
+Preprocessing library cassava-0.4.2.0...
+[ 1 of 10] Compiling Data.Csv.Compat.Monoid ( Data/Csv/Compat/Monoid.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Compat/Monoid.o )
+[ 2 of 10] Compiling Data.Csv.Conversion.Internal ( Data/Csv/Conversion/Internal.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Conversion/Internal.o )
+
+Data/Csv/Conversion/Internal.hs:28:11: Warning:
+    Rule "formatDecimal/Int" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:30:11: Warning:
+    Rule "formatDecimal/Int16" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:32:11: Warning:
+    Rule "formatDecimal/Int32" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:34:11: Warning:
+    Rule "formatDecimal/Int64" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:36:11: Warning:
+    Rule "formatDecimal/Word" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:38:11: Warning:
+    Rule "formatDecimal/Word8" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:40:11: Warning:
+    Rule "formatDecimal/Word16" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:42:11: Warning:
+    Rule "formatDecimal/Word32" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:44:11: Warning:
+    Rule "formatDecimal/Word64" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+[ 3 of 10] Compiling Data.Csv.Util    ( Data/Csv/Util.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Util.o )
+
+Data/Csv/Util.hs:16:1: Warning:
+    Module ‘Data.Attoparsec’ is deprecated:
+      This module will be removed in the next major release.
+
+Data/Csv/Util.hs:19:1: Warning:
+    Module ‘Data.Attoparsec’ is deprecated:
+      This module will be removed in the next major release.
+[ 4 of 10] Compiling Data.Csv.Types   ( Data/Csv/Types.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Types.o )
+[ 5 of 10] Compiling Data.Csv.Parser  ( Data/Csv/Parser.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Parser.o )
+
+Data/Csv/Parser.hs:30:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+
+Data/Csv/Parser.hs:31:1: Warning:
+    Module ‘Data.Attoparsec’ is deprecated:
+      This module will be removed in the next major release.
+[ 6 of 10] Compiling Data.Csv.Conversion ( Data/Csv/Conversion.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Conversion.o )
+
+Data/Csv/Conversion.hs:37:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+
+Data/Csv/Conversion.hs:38:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+[ 7 of 10] Compiling Data.Csv.Encoding ( Data/Csv/Encoding.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Encoding.o )
+
+Data/Csv/Encoding.hs:36:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+[ 8 of 10] Compiling Data.Csv.Incremental ( Data/Csv/Incremental.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Incremental.o )
+
+Data/Csv/Incremental.hs:31:1: Warning:
+    Module ‘Data.Attoparsec’ is deprecated:
+      This module will be removed in the next major release.
+
+Data/Csv/Incremental.hs:32:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+[ 9 of 10] Compiling Data.Csv.Streaming ( Data/Csv/Streaming.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Streaming.o )
+[10 of 10] Compiling Data.Csv         ( Data/Csv.hs, dist/dist-sandbox-e922fd97/build/Data/Csv.o )
+[ 1 of 10] Compiling Data.Csv.Compat.Monoid ( Data/Csv/Compat/Monoid.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Compat/Monoid.p_o )
+[ 2 of 10] Compiling Data.Csv.Conversion.Internal ( Data/Csv/Conversion/Internal.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Conversion/Internal.p_o )
+
+Data/Csv/Conversion/Internal.hs:28:11: Warning:
+    Rule "formatDecimal/Int" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:30:11: Warning:
+    Rule "formatDecimal/Int16" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:32:11: Warning:
+    Rule "formatDecimal/Int32" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:34:11: Warning:
+    Rule "formatDecimal/Int64" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:36:11: Warning:
+    Rule "formatDecimal/Word" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:38:11: Warning:
+    Rule "formatDecimal/Word8" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:40:11: Warning:
+    Rule "formatDecimal/Word16" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:42:11: Warning:
+    Rule "formatDecimal/Word32" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+
+Data/Csv/Conversion/Internal.hs:44:11: Warning:
+    Rule "formatDecimal/Word64" may never fire
+      because ‘formatDecimal’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘formatDecimal’
+[ 3 of 10] Compiling Data.Csv.Util    ( Data/Csv/Util.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Util.p_o )
+
+Data/Csv/Util.hs:16:1: Warning:
+    Module ‘Data.Attoparsec’ is deprecated:
+      This module will be removed in the next major release.
+
+Data/Csv/Util.hs:19:1: Warning:
+    Module ‘Data.Attoparsec’ is deprecated:
+      This module will be removed in the next major release.
+[ 4 of 10] Compiling Data.Csv.Types   ( Data/Csv/Types.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Types.p_o )
+[ 5 of 10] Compiling Data.Csv.Parser  ( Data/Csv/Parser.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Parser.p_o )
+
+Data/Csv/Parser.hs:30:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+
+Data/Csv/Parser.hs:31:1: Warning:
+    Module ‘Data.Attoparsec’ is deprecated:
+      This module will be removed in the next major release.
+[ 6 of 10] Compiling Data.Csv.Conversion ( Data/Csv/Conversion.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Conversion.p_o )
+
+Data/Csv/Conversion.hs:37:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+
+Data/Csv/Conversion.hs:38:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+[ 7 of 10] Compiling Data.Csv.Encoding ( Data/Csv/Encoding.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Encoding.p_o )
+
+Data/Csv/Encoding.hs:36:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+[ 8 of 10] Compiling Data.Csv.Incremental ( Data/Csv/Incremental.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Incremental.p_o )
+
+Data/Csv/Incremental.hs:31:1: Warning:
+    Module ‘Data.Attoparsec’ is deprecated:
+      This module will be removed in the next major release.
+
+Data/Csv/Incremental.hs:32:1: Warning:
+    Module ‘Data.Attoparsec.Char8’ is deprecated:
+      This module will be removed in the next major release.
+[ 9 of 10] Compiling Data.Csv.Streaming ( Data/Csv/Streaming.hs, dist/dist-sandbox-e922fd97/build/Data/Csv/Streaming.p_o )
+[10 of 10] Compiling Data.Csv         ( Data/Csv.hs, dist/dist-sandbox-e922fd97/build/Data/Csv.p_o )
+In-place registering cassava-0.4.2.0...
+Creating package registration file: /tmp/pkgConf-cassava-0.4.27891.0
+Installing library in
+/home/pold/Dropbox/Uni/Radboud/Text_Mining/Haggressive/.cabal-sandbox/lib/x86_64-linux-ghc-7.8.3/cassava-0.4.2.0
+Registering cassava-0.4.2.0...

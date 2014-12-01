@@ -1,0 +1,42 @@
+Configuring hashable-1.2.2.0...
+Building hashable-1.2.2.0...
+Preprocessing library hashable-1.2.2.0...
+[1 of 3] Compiling Data.Hashable.Class ( Data/Hashable/Class.hs, dist/dist-sandbox-e922fd97/build/Data/Hashable/Class.o )
+
+Data/Hashable/Class.hs:201:11: Warning:
+    In the use of ‘bitSize’ (imported from Data.Bits):
+    Deprecated: "Use 'bitSizeMaybe' or 'finiteBitSize' instead"
+
+Data/Hashable/Class.hs:224:11: Warning:
+    In the use of ‘bitSize’ (imported from Data.Bits):
+    Deprecated: "Use 'bitSizeMaybe' or 'finiteBitSize' instead"
+
+Data/Hashable/Class.hs:105:15: Warning:
+    Literal 15868100553162883236 is out of the Int range -9223372036854775808..9223372036854775807
+[2 of 3] Compiling Data.Hashable.Generic ( Data/Hashable/Generic.hs, dist/dist-sandbox-e922fd97/build/Data/Hashable/Generic.o )
+
+Data/Hashable/Generic.hs:20:1: Warning:
+    The import of ‘Bits’ from module ‘Data.Bits’ is redundant
+[3 of 3] Compiling Data.Hashable    ( Data/Hashable.hs, dist/dist-sandbox-e922fd97/build/Data/Hashable.o )
+[1 of 3] Compiling Data.Hashable.Class ( Data/Hashable/Class.hs, dist/dist-sandbox-e922fd97/build/Data/Hashable/Class.p_o )
+
+Data/Hashable/Class.hs:201:11: Warning:
+    In the use of ‘bitSize’ (imported from Data.Bits):
+    Deprecated: "Use 'bitSizeMaybe' or 'finiteBitSize' instead"
+
+Data/Hashable/Class.hs:224:11: Warning:
+    In the use of ‘bitSize’ (imported from Data.Bits):
+    Deprecated: "Use 'bitSizeMaybe' or 'finiteBitSize' instead"
+
+Data/Hashable/Class.hs:105:15: Warning:
+    Literal 15868100553162883236 is out of the Int range -9223372036854775808..9223372036854775807
+[2 of 3] Compiling Data.Hashable.Generic ( Data/Hashable/Generic.hs, dist/dist-sandbox-e922fd97/build/Data/Hashable/Generic.p_o )
+
+Data/Hashable/Generic.hs:20:1: Warning:
+    The import of ‘Bits’ from module ‘Data.Bits’ is redundant
+[3 of 3] Compiling Data.Hashable    ( Data/Hashable.hs, dist/dist-sandbox-e922fd97/build/Data/Hashable.p_o )
+In-place registering hashable-1.2.2.0...
+Creating package registration file: /tmp/pkgConf-hashable-1.2.27891.0
+Installing library in
+/home/pold/Dropbox/Uni/Radboud/Text_Mining/Haggressive/.cabal-sandbox/lib/x86_64-linux-ghc-7.8.3/hashable-1.2.2.0
+Registering hashable-1.2.2.0...

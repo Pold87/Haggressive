@@ -1,0 +1,88 @@
+Configuring vector-0.10.12.1...
+Building vector-0.10.12.1...
+Preprocessing library vector-0.10.12.1...
+[ 1 of 19] Compiling Data.Vector.Storable.Internal ( Data/Vector/Storable/Internal.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Storable/Internal.o )
+[ 2 of 19] Compiling Data.Vector.Fusion.Util ( Data/Vector/Fusion/Util.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Fusion/Util.o )
+[ 3 of 19] Compiling Data.Vector.Fusion.Stream.Size ( Data/Vector/Fusion/Stream/Size.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Fusion/Stream/Size.o )
+
+Data/Vector/Fusion/Stream/Size.hs:25:10: Warning:
+    No explicit implementation for
+      ‘*’, ‘abs’, and ‘signum’
+    In the instance declaration for ‘Num Size’
+[ 4 of 19] Compiling Data.Vector.Internal.Check ( Data/Vector/Internal/Check.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Internal/Check.o )
+[ 5 of 19] Compiling Data.Vector.Fusion.Stream.Monadic ( Data/Vector/Fusion/Stream/Monadic.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Fusion/Stream/Monadic.o )
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Loading package primitive-0.5.4.0 ... linking ... done.
+Loading package array-0.5.0.0 ... linking ... done.
+Loading package deepseq-1.3.0.2 ... linking ... done.
+[ 6 of 19] Compiling Data.Vector.Fusion.Stream ( Data/Vector/Fusion/Stream.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Fusion/Stream.o )
+[ 7 of 19] Compiling Data.Vector.Generic.Mutable ( Data/Vector/Generic/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Generic/Mutable.o )
+[ 8 of 19] Compiling Data.Vector.Generic.Base ( Data/Vector/Generic/Base.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Generic/Base.o )
+[ 9 of 19] Compiling Data.Vector.Generic.New ( Data/Vector/Generic/New.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Generic/New.o )
+[10 of 19] Compiling Data.Vector.Generic ( Data/Vector/Generic.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Generic.o )
+[11 of 19] Compiling Data.Vector.Primitive.Mutable ( Data/Vector/Primitive/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Primitive/Mutable.o )
+[12 of 19] Compiling Data.Vector.Primitive ( Data/Vector/Primitive.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Primitive.o )
+[13 of 19] Compiling Data.Vector.Storable.Mutable ( Data/Vector/Storable/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Storable/Mutable.o )
+
+Data/Vector/Storable/Mutable.hs:449:1: Warning:
+    Rule "unsafeFromForeignPtr fp 0 n -> unsafeFromForeignPtr0 fp n " may never fire
+      because ‘unsafeFromForeignPtr’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘unsafeFromForeignPtr’
+[14 of 19] Compiling Data.Vector.Storable ( Data/Vector/Storable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Storable.o )
+
+Data/Vector/Storable.hs:1397:1: Warning:
+    Rule "unsafeFromForeignPtr fp 0 n -> unsafeFromForeignPtr0 fp n " may never fire
+      because ‘unsafeFromForeignPtr’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘unsafeFromForeignPtr’
+[15 of 19] Compiling Data.Vector.Unboxed.Base ( Data/Vector/Unboxed/Base.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Unboxed/Base.o )
+[16 of 19] Compiling Data.Vector.Unboxed ( Data/Vector/Unboxed.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Unboxed.o )
+[17 of 19] Compiling Data.Vector.Unboxed.Mutable ( Data/Vector/Unboxed/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Unboxed/Mutable.o )
+[18 of 19] Compiling Data.Vector.Mutable ( Data/Vector/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Mutable.o )
+[19 of 19] Compiling Data.Vector      ( Data/Vector.hs, dist/dist-sandbox-e922fd97/build/Data/Vector.o )
+[ 1 of 19] Compiling Data.Vector.Storable.Internal ( Data/Vector/Storable/Internal.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Storable/Internal.p_o )
+[ 2 of 19] Compiling Data.Vector.Fusion.Util ( Data/Vector/Fusion/Util.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Fusion/Util.p_o )
+[ 3 of 19] Compiling Data.Vector.Fusion.Stream.Size ( Data/Vector/Fusion/Stream/Size.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Fusion/Stream/Size.p_o )
+
+Data/Vector/Fusion/Stream/Size.hs:25:10: Warning:
+    No explicit implementation for
+      ‘*’, ‘abs’, and ‘signum’
+    In the instance declaration for ‘Num Size’
+[ 4 of 19] Compiling Data.Vector.Internal.Check ( Data/Vector/Internal/Check.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Internal/Check.p_o )
+[ 5 of 19] Compiling Data.Vector.Fusion.Stream.Monadic ( Data/Vector/Fusion/Stream/Monadic.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Fusion/Stream/Monadic.p_o )
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+Loading package primitive-0.5.4.0 ... linking ... done.
+Loading package array-0.5.0.0 ... linking ... done.
+Loading package deepseq-1.3.0.2 ... linking ... done.
+[ 6 of 19] Compiling Data.Vector.Fusion.Stream ( Data/Vector/Fusion/Stream.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Fusion/Stream.p_o )
+[ 7 of 19] Compiling Data.Vector.Generic.Mutable ( Data/Vector/Generic/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Generic/Mutable.p_o )
+[ 8 of 19] Compiling Data.Vector.Generic.Base ( Data/Vector/Generic/Base.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Generic/Base.p_o )
+[ 9 of 19] Compiling Data.Vector.Generic.New ( Data/Vector/Generic/New.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Generic/New.p_o )
+[10 of 19] Compiling Data.Vector.Generic ( Data/Vector/Generic.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Generic.p_o )
+[11 of 19] Compiling Data.Vector.Primitive.Mutable ( Data/Vector/Primitive/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Primitive/Mutable.p_o )
+[12 of 19] Compiling Data.Vector.Primitive ( Data/Vector/Primitive.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Primitive.p_o )
+[13 of 19] Compiling Data.Vector.Storable.Mutable ( Data/Vector/Storable/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Storable/Mutable.p_o )
+
+Data/Vector/Storable/Mutable.hs:449:1: Warning:
+    Rule "unsafeFromForeignPtr fp 0 n -> unsafeFromForeignPtr0 fp n " may never fire
+      because ‘unsafeFromForeignPtr’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘unsafeFromForeignPtr’
+[14 of 19] Compiling Data.Vector.Storable ( Data/Vector/Storable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Storable.p_o )
+
+Data/Vector/Storable.hs:1397:1: Warning:
+    Rule "unsafeFromForeignPtr fp 0 n -> unsafeFromForeignPtr0 fp n " may never fire
+      because ‘unsafeFromForeignPtr’ might inline first
+    Probable fix: add an INLINE[n] or NOINLINE[n] pragma on ‘unsafeFromForeignPtr’
+[15 of 19] Compiling Data.Vector.Unboxed.Base ( Data/Vector/Unboxed/Base.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Unboxed/Base.p_o )
+[16 of 19] Compiling Data.Vector.Unboxed ( Data/Vector/Unboxed.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Unboxed.p_o )
+[17 of 19] Compiling Data.Vector.Unboxed.Mutable ( Data/Vector/Unboxed/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Unboxed/Mutable.p_o )
+[18 of 19] Compiling Data.Vector.Mutable ( Data/Vector/Mutable.hs, dist/dist-sandbox-e922fd97/build/Data/Vector/Mutable.p_o )
+[19 of 19] Compiling Data.Vector      ( Data/Vector.hs, dist/dist-sandbox-e922fd97/build/Data/Vector.p_o )
+In-place registering vector-0.10.12.1...
+Creating package registration file: /tmp/pkgConf-vector-0.10.127891.1
+Installing library in
+/home/pold/Dropbox/Uni/Radboud/Text_Mining/Haggressive/.cabal-sandbox/lib/x86_64-linux-ghc-7.8.3/vector-0.10.12.1
+Registering vector-0.10.12.1...

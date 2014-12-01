@@ -1,0 +1,34 @@
+Configuring blaze-builder-0.3.3.4...
+Building blaze-builder-0.3.3.4...
+Preprocessing library blaze-builder-0.3.3.4...
+[ 1 of 13] Compiling Blaze.ByteString.Builder.Internal.Types ( Blaze/ByteString/Builder/Internal/Types.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal/Types.o )
+[ 2 of 13] Compiling Blaze.ByteString.Builder.Internal.Write ( Blaze/ByteString/Builder/Internal/Write.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal/Write.o )
+[ 3 of 13] Compiling Blaze.ByteString.Builder.Internal.Buffer ( Blaze/ByteString/Builder/Internal/Buffer.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal/Buffer.o )
+[ 4 of 13] Compiling Blaze.ByteString.Builder.Internal.UncheckedShifts ( Blaze/ByteString/Builder/Internal/UncheckedShifts.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal/UncheckedShifts.o )
+[ 5 of 13] Compiling Blaze.ByteString.Builder.Internal ( Blaze/ByteString/Builder/Internal.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal.o )
+[ 6 of 13] Compiling Blaze.ByteString.Builder.Char.Utf8 ( Blaze/ByteString/Builder/Char/Utf8.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Char/Utf8.o )
+[ 7 of 13] Compiling Blaze.ByteString.Builder.ByteString ( Blaze/ByteString/Builder/ByteString.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/ByteString.o )
+[ 8 of 13] Compiling Blaze.ByteString.Builder.Word ( Blaze/ByteString/Builder/Word.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Word.o )
+[ 9 of 13] Compiling Blaze.ByteString.Builder.Char8 ( Blaze/ByteString/Builder/Char8.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Char8.o )
+[10 of 13] Compiling Blaze.ByteString.Builder.HTTP ( Blaze/ByteString/Builder/HTTP.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/HTTP.o )
+[11 of 13] Compiling Blaze.ByteString.Builder.Int ( Blaze/ByteString/Builder/Int.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Int.o )
+[12 of 13] Compiling Blaze.ByteString.Builder ( Blaze/ByteString/Builder.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder.o )
+[13 of 13] Compiling Blaze.ByteString.Builder.Html.Utf8 ( Blaze/ByteString/Builder/Html/Utf8.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Html/Utf8.o )
+[ 1 of 13] Compiling Blaze.ByteString.Builder.Internal.Types ( Blaze/ByteString/Builder/Internal/Types.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal/Types.p_o )
+[ 2 of 13] Compiling Blaze.ByteString.Builder.Internal.Write ( Blaze/ByteString/Builder/Internal/Write.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal/Write.p_o )
+[ 3 of 13] Compiling Blaze.ByteString.Builder.Internal.Buffer ( Blaze/ByteString/Builder/Internal/Buffer.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal/Buffer.p_o )
+[ 4 of 13] Compiling Blaze.ByteString.Builder.Internal.UncheckedShifts ( Blaze/ByteString/Builder/Internal/UncheckedShifts.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal/UncheckedShifts.p_o )
+[ 5 of 13] Compiling Blaze.ByteString.Builder.Internal ( Blaze/ByteString/Builder/Internal.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Internal.p_o )
+[ 6 of 13] Compiling Blaze.ByteString.Builder.Char.Utf8 ( Blaze/ByteString/Builder/Char/Utf8.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Char/Utf8.p_o )
+[ 7 of 13] Compiling Blaze.ByteString.Builder.ByteString ( Blaze/ByteString/Builder/ByteString.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/ByteString.p_o )
+[ 8 of 13] Compiling Blaze.ByteString.Builder.Word ( Blaze/ByteString/Builder/Word.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Word.p_o )
+[ 9 of 13] Compiling Blaze.ByteString.Builder.Char8 ( Blaze/ByteString/Builder/Char8.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Char8.p_o )
+[10 of 13] Compiling Blaze.ByteString.Builder.HTTP ( Blaze/ByteString/Builder/HTTP.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/HTTP.p_o )
+[11 of 13] Compiling Blaze.ByteString.Builder.Int ( Blaze/ByteString/Builder/Int.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Int.p_o )
+[12 of 13] Compiling Blaze.ByteString.Builder ( Blaze/ByteString/Builder.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder.p_o )
+[13 of 13] Compiling Blaze.ByteString.Builder.Html.Utf8 ( Blaze/ByteString/Builder/Html/Utf8.hs, dist/dist-sandbox-e922fd97/build/Blaze/ByteString/Builder/Html/Utf8.p_o )
+In-place registering blaze-builder-0.3.3.4...
+Creating package registration file: /tmp/pkgConf-blaze-builder-0.3.37891.4
+Installing library in
+/home/pold/Dropbox/Uni/Radboud/Text_Mining/Haggressive/.cabal-sandbox/lib/x86_64-linux-ghc-7.8.3/blaze-builder-0.3.3.4
+Registering blaze-builder-0.3.3.4...

@@ -1,0 +1,142 @@
+\haddockmoduleheading{Hag}
+\label{module:Hag}
+\haddockbeginheader
+{\haddockverb\begin{verbatim}
+module Hag (
+    parseCsv,  getFiles,  countItem,  frequency,  iFrequency,  idftf, 
+    intersectDistance,  tweetToMiniDict,  insertInMap,  validate, 
+    crossCheckBetterK,  featureIntersectionBetterK,  queueTake,  queueTake', 
+    mergeTweetFeatures,  crossCheckReal,  crossCheckRealK,  getCategoryK,  end, 
+    endList,  main
+  ) where\end{verbatim}}
+\haddockendheader
+
+This module is the main interface for Tweet classification.\par
+
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+parseCsv\ ::\ Text\ ->\ Either\ String\ (Vector\ Tweet)
+\end{tabular}]\haddockbegindoc
+\section*{IO and Parsing}\par
+\haddockid{parseCsv} parses a \haddockid{Text} input for fields in CSV format and
+ returns a \haddocktt{Vector} of \haddockid{Tweet}s\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+getFiles\ ::\ FilePath\ ->\ IO\ {\char 91}FilePath{\char 93}
+\end{tabular}]\haddockbegindoc
+Get directory contents of \haddockid{FilePath}. A better variant is at:
+ \url{http://book.realworldhaskell.org/read/systems-programming-in-haskell.html}\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+countItem\ ::\ Ord\ a\ =>\ Map\ a\ Float\ ->\ a\ ->\ Map\ a\ Float
+\end{tabular}]\haddockbegindoc
+\section*{Dictionary operations}\par
+For convenice, I refer to two dictionaries:
+ * Mini Dictionary
+ The bag of words for \emph{one} Tweet
+ * Grand Dictionary
+ The bag of words for the entire Corpus
+ \textbf{TODO}: Could be defined as type.\par
+Insert an item into a \haddockid{Map}. Default value is 1 if the item is
+ not existing. If the item is already existing, its frequency will
+ be increased by 1.\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+frequency\ ::\ Ord\ a\ =>\ Vector\ a\ ->\ Map\ a\ Float
+\end{tabular}]\haddockbegindoc
+Calculate the \haddockid{frequency} of items in a \haddockid{Vector} and return them
+ in a \haddockid{Map}.\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[
+iFrequency\ ::\ Map\ String\ Float\ ->\ String\ ->\ Float\ ->\ Float
+]
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+idftf\ ::\ Map\ String\ Float\ ->\ Map\ String\ Float\ ->\ Map\ String\ Float
+\end{tabular}]\haddockbegindoc
+Takes a mini dictionary (frequency of words in one Tweet) and a
+ dictionary and calculates the idftf values for all words in the
+ mini dictionary.\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+intersectDistance\ ::\ Num\ a\ =>\ Map\ String\ a\ ->\ Map\ String\ a\ ->\ a
+\end{tabular}]\haddockbegindoc
+Take the bag of words of two \haddockid{Tweet}s and return the distance as
+ \haddockid{Num}. \emph{TODO}: Forgot it.\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+tweetToMiniDict\ ::\ Tweet\ ->\ Map\ String\ Float
+\end{tabular}]\haddockbegindoc
+Extract features (for the bag of words) for one Tweet.
+ Thereby, the Tweet will be (in order of application):
+ * tokenized
+ * converted to a \haddockid{Vector}
+ * \haddockid{String}s will be converted to lowercase
+ * \haddockid{String}s that are not \haddockid{isAlpha} are removed
+ * \haddockid{String}s that are element of \haddockid{stopWords} are removed
+ * Empty \haddockid{String}s will be removed\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+insertInMap\ ::\ Map\ Tweet\ (Map\ String\ Float)\\\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ->\ Tweet\ ->\ Map\ Tweet\ (Map\ String\ Float)
+\end{tabular}]\haddockbegindoc
+Take a 'Grand Dictionary'\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[\begin{tabular}{@{}l}
+validate\ ::\ Int\\\ \ \ \ \ \ \ \ \ \ \ \ ->\ (Vector\ Tweet,\ Vector\ Tweet)\ ->\ Vector\ (Tweet,\ {\char 91}Tweet{\char 93})
+\end{tabular}]\haddockbegindoc
+Specify k (the number of neighbors) and compare two vectors of
+ \haddockid{Tweet}s and return the k nearest neighbors for each \haddockid{Tweet}.\par
+
+\end{haddockdesc}
+\begin{haddockdesc}
+\item[
+crossCheckBetterK\ ::\ Int\\\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ->\ Map\ Tweet\ (Map\ String\ Float)\ ->\ Tweet\ ->\ (Tweet,\ {\char 91}Tweet{\char 93})
+]
+\item[
+featureIntersectionBetterK\ ::\ Int\\\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ->\ Map\ Tweet\ (Map\ String\ Float)\ ->\ Tweet\ ->\ (Tweet,\ {\char 91}Tweet{\char 93})
+]
+\item[
+queueTake\ ::\ Int\ ->\ PSQ\ Tweet\ Float\ ->\ {\char 91}Tweet{\char 93}
+]
+\item[
+queueTake'\ ::\ Int\ ->\ PSQ\ Tweet\ Float\ ->\ {\char 91}Tweet{\char 93}\ ->\ {\char 91}Tweet{\char 93}
+]
+\item[
+mergeTweetFeatures\ ::\ (Map\ String\ Float\\\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ->\ Map\ String\ Float\ ->\ Float)\\\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ->\ Tweet\ ->\ Tweet\ ->\ Map\ String\ Float\ ->\ Binding\ Tweet\ Float
+]
+\item[
+crossCheckReal\ ::\ Vector\ (Tweet,\ Tweet,\ Float)\ ->\ Vector\ Float
+]
+\item[
+crossCheckRealK\ ::\ Vector\ (Tweet,\ {\char 91}Tweet{\char 93})\ ->\ Vector\ Float
+]
+\item[
+getCategoryK\ ::\ {\char 91}Tweet{\char 93}\ ->\ String
+]
+\item[
+end\ ::\ Vector\ Float\ ->\ Float
+]
+\item[
+endList\ ::\ {\char 91}Float{\char 93}\ ->\ Float
+]
+\item[
+main\ ::\ IO\ ()
+]
+\end{haddockdesc}

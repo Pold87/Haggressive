@@ -1,0 +1,42 @@
+Configuring tokenize-0.2.2...
+Building tokenize-0.2.2...
+Preprocessing library tokenize-0.2.2...
+[1 of 3] Compiling NLP.Tokenize.Text ( src/NLP/Tokenize/Text.hs, dist/dist-sandbox-e922fd97/build/NLP/Tokenize/Text.o )
+
+src/NLP/Tokenize/Text.hs:24:1: Warning:
+    Module ‘Control.Monad.Instances’ is deprecated:
+      This module now contains no instances and will be removed in the future
+
+src/NLP/Tokenize/Text.hs:128:10: Warning:
+    ‘EitherList’ is an instance of Monad but not Applicative - this will become an error in GHC 7.10, under the Applicative-Monad Proposal.
+[2 of 3] Compiling NLP.Tokenize.String ( src/NLP/Tokenize/String.hs, dist/dist-sandbox-e922fd97/build/NLP/Tokenize/String.o )
+
+src/NLP/Tokenize/String.hs:21:1: Warning:
+    Module ‘Control.Monad.Instances’ is deprecated:
+      This module now contains no instances and will be removed in the future
+
+src/NLP/Tokenize/String.hs:114:10: Warning:
+    ‘EitherList’ is an instance of Monad but not Applicative - this will become an error in GHC 7.10, under the Applicative-Monad Proposal.
+[3 of 3] Compiling NLP.Tokenize     ( src/NLP/Tokenize.hs, dist/dist-sandbox-e922fd97/build/NLP/Tokenize.o )
+[1 of 3] Compiling NLP.Tokenize.Text ( src/NLP/Tokenize/Text.hs, dist/dist-sandbox-e922fd97/build/NLP/Tokenize/Text.p_o )
+
+src/NLP/Tokenize/Text.hs:24:1: Warning:
+    Module ‘Control.Monad.Instances’ is deprecated:
+      This module now contains no instances and will be removed in the future
+
+src/NLP/Tokenize/Text.hs:128:10: Warning:
+    ‘EitherList’ is an instance of Monad but not Applicative - this will become an error in GHC 7.10, under the Applicative-Monad Proposal.
+[2 of 3] Compiling NLP.Tokenize.String ( src/NLP/Tokenize/String.hs, dist/dist-sandbox-e922fd97/build/NLP/Tokenize/String.p_o )
+
+src/NLP/Tokenize/String.hs:21:1: Warning:
+    Module ‘Control.Monad.Instances’ is deprecated:
+      This module now contains no instances and will be removed in the future
+
+src/NLP/Tokenize/String.hs:114:10: Warning:
+    ‘EitherList’ is an instance of Monad but not Applicative - this will become an error in GHC 7.10, under the Applicative-Monad Proposal.
+[3 of 3] Compiling NLP.Tokenize     ( src/NLP/Tokenize.hs, dist/dist-sandbox-e922fd97/build/NLP/Tokenize.p_o )
+In-place registering tokenize-0.2.2...
+Creating package registration file: /tmp/pkgConf-tokenize-0.27891.2
+Installing library in
+/home/pold/Dropbox/Uni/Radboud/Text_Mining/Haggressive/.cabal-sandbox/lib/x86_64-linux-ghc-7.8.3/tokenize-0.2.2
+Registering tokenize-0.2.2...

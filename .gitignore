@@ -1,6 +1,3 @@
 .cabal-sandbox/
-Haggressive.cabal~
 cabal.sandbox.config
 dist/
-src/tests.hs~
-testsuite/tests/tests.hs~

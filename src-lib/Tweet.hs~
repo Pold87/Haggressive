@@ -1,7 +1,0 @@
-module TweetHelpers where
-
-mkCrossValScheme :: [V.Vector Tweet] -> [(V.Vector Tweet,V.Vector Tweet)]
-mkCrossValScheme xs = map (leaveOneOut xs) xs
-
-leaveOneOut :: [V.Vector Tweet] -> V.Vector Tweet -> (V.Vector Tweet,V.Vector Tweet)
-leaveOneOut all test = (test, V.concat $ filter (/= test) all)

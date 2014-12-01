@@ -29,6 +29,7 @@ import qualified Data.Text            as T
 import           Data.Text.Encoding
 import qualified Data.Text.IO         as TI
 import qualified Data.Vector          as V
+import           Debug.Trace
 import           Helpers
 import           NLP.Tokenize
 import           Preprocess
@@ -70,7 +71,7 @@ getFiles dir = S.getDirectoryContents dir
 extractFeatures :: Tweet -> FeatureMap
 extractFeatures tweet = bagOfWords
   where
-    pre = V.filter (`notElem` ["USER", "RT"])
+    preprocess = V.filter (`notElem` ["USER", "RT"])
                  . V.fromList
                  . tokenize
                  . tMessage
@@ -78,7 +79,7 @@ extractFeatures tweet = bagOfWords
                  . V.filter (/= "")
                  . V.filter (`notElem` stopWords)
                  . V.map (map toLower)
-                 . pre
+                 . preprocess
                  $ tweet
 
 -- |Calculate the 'frequency' of items in a 'V.Vector' and return them
@@ -131,7 +132,7 @@ mergeTweetFeatures :: (FeatureMap -> FeatureMap -> Float)
                       -> Tweet
                       -> FeatureMap
                       -> PS.Binding Tweet Float
-mergeTweetFeatures distF t1 t2 _ = queue
+mergeTweetFeatures distF t1 t2 dictionary = queue
   where featuresT1 = extractFeatures t1
         featuresT2 = extractFeatures t2
         distance = distF featuresT1 featuresT2
@@ -140,7 +141,7 @@ mergeTweetFeatures distF t1 t2 _ = queue
 -- |Take the features of two 'Tweet's and return the distance as
 -- 'Num'.
 cosineDistance :: FeatureMap ->  FeatureMap -> Float
-cosineDistance t1 t2 = negate (mySum / (wordsInT1 * wordsInT2))
+cosineDistance t1 t2 = -1000 * (mySum / (wordsInT1 * wordsInT2))
   where
     wordsInT1 = M.foldl (+) 0 t1
     wordsInT2 = M.foldl (+) 0 t2
@@ -165,9 +166,24 @@ compareLabels k vec = V.map
                     (\(a,b) -> if (tLabel a) == getLabel k b then 1 else 0)
                     vec
 
+
+-- | Calculate the amount of tweets where the predicted label matches
+-- the actual label.
+compareLabelsBetter ::  Int -> V.Vector (Tweet,PS.PSQ Tweet Float) ->  V.Vector [Float]
+compareLabelsBetter k vec = V.map
+                    (\(a,b) -> if (tLabel a) == getLabel k b
+                               then if (tLabel a) == "aggressive" then [1,0,0,0] else [0,1,0,0]
+                               else
+                                 if (tLabel a) == "aggressive" then [0,0,1,0] else [0,0,0,1])
+                    vec
+
+
 compareLabelsForScheme :: [V.Vector (Tweet,PS.PSQ Tweet Float)] -> Int -> [Float]
 compareLabelsForScheme vecs k = map (getAccuracy . compareLabels k) vecs
 
+
+compareLabelsForSchemeBetter :: [V.Vector (Tweet,PS.PSQ Tweet Float)] -> Int -> [[Float]]
+compareLabelsForSchemeBetter vecs k = map (getAccuracy . compareLabelsBetter k) vecs
 
 -- | Get the label for a 'Tweet' by looking at the k nearest
 -- neighbors. If there are more aggressive than non_aggressive
@@ -184,6 +200,15 @@ getLabel k queue = if agg >= nonAgg then "aggressive" else "non_aggressive"
 -- correctly classified tweets) and return the accuracy
 getAccuracy :: V.Vector Float -> Float
 getAccuracy vec =   (V.foldl (+) 0 vec) / fromIntegral (V.length vec)
+
+
+-- | Get sum total of a vector of floats (i.e., the number of
+-- correctly classified tweets) and return the accuracy
+getAccuracyBetter :: V.Vector [Float] -> [Float]
+getAccuracyBetter vec =   (V.foldl (+) [0,0,0,0] vec)
+
+addTwoLists :: [Float] -> [Float] -> [Float]
+addTwoLists [a1,b1,c1,d1] [a2,b2,c2,d2] = [a1 + a2, b1 + b2, c1 + c2, d1 + d2]
 
 main :: IO ()
 main = do
@@ -217,7 +242,7 @@ main = do
     ks = [1..100]
 
     -- Compare all training tweets to test tweets for all ks
-    comparedTweets = map (compareLabelsForScheme allNeighbors) ks
+    comparedTweets = map (compareLabelsForSchemeBetter allNeighbors) ks
 
     -- Prepare for CSV
     results = encode comparedTweets

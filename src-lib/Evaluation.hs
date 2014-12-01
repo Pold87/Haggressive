@@ -12,6 +12,7 @@ import           Data.Either
 import           Data.List
 import qualified Data.Map                   as M
 import           Data.Ord
+import qualified Data.PSQueue               as PS
 import qualified Data.Text                  as T
 import           Data.Text.Encoding
 import qualified Data.Text.IO               as TI
@@ -25,9 +26,6 @@ import qualified System.Directory           as S
 import           System.Environment
 import           Tweets
 
-
-import qualified Data.PSQueue               as PS
--- import           Debug.Trace
 
 -- |Create a dictionary ('M.Map String Float' /TODO/: probably define
 -- dictionary type) from a 'V.Vector' of 'Tweet's

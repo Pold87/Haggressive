@@ -224,8 +224,9 @@ main = do
     results = encode comparedTweets
 
   -- Create header
-    header = encode
-             $ map (("fold_" ++) . show) ([1..10] :: [Integer])
+  --  header = encode
+  --           $ map (("fold_" ++) . show) ([1..10] :: [Integer])
 
   -- Write output to a file
-  L.writeFile "resultsK.csv" $ header `L.append` results
+  -- L.writeFile "resultsK.csv" $ header `L.append` results
+  L.writeFile "resultsK.csv" $ results
